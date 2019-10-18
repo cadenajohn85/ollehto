@@ -3,20 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 class Square extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: null,
-            bgColor: 'white'
-        };
-    }
-
     render() {
         return (
             <button
                 className="square"
-                style={{backgroundColor:this.state.bgColor}}
-                onClick={() => this.setState({bgColor: 'blue'}) }
+                style={{backgroundColor:this.props.bgColor}}
+                onClick={() => this.props.onClick({bgColor: 'blue'}) }
             >
             </button>
         );
@@ -24,8 +16,26 @@ class Square extends React.Component {
 }
 
 class Board extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            squares: Array(64).fill('white'),
+        };
+    }
+
+    handleClick(i) {
+        const squares = this.state.squares.slice();
+        squares[i] = 'blue';
+        this.setState({squares: squares});
+    }
+
     renderSquare(i) {
-        return <Square value={i} />;
+        return (
+            <Square
+                bgColor={this.state.squares[i]}
+                onClick={() => this.handleClick(i)}
+            />
+        );
     }
 
     // Using loops to render repeated elements in React:
@@ -49,6 +59,7 @@ class Board extends React.Component {
 
     render() {
         const status = 'Next player: Blue';
+
         return (
             <div>
                 <div className="status">{status}</div>
@@ -57,7 +68,6 @@ class Board extends React.Component {
                 </div>
             </div>
             )
-
     }
 }
 
