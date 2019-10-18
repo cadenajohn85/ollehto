@@ -17,29 +17,33 @@ class Board extends React.Component {
         return <Square />;
     }
 
-    render() {
-        const status = 'Next player: X';
+    // Using loops to render repeated elements in React:
+    // https://blog.cloudboost.io/for-loops-in-react-render-no-you-didnt-6c9f4aa73778
+    renderBoard = () => {
+        let board = [];
 
+        // Outer loop to create parent
+        for (let i = 0; i < 8; i++) {
+            let children = [];
+            //Inner loop to create children
+            for (let j = 0; j < 8; j++) {
+                // children.push(<div>{`Column ${j + 1}`}</div>)
+                children.push(this.renderSquare(j));
+            }
+            //Create the parent and add the children
+            board.push(<div>{children}</div>)
+        }
+        return board;
+    };
+
+
+    render() {
         return (
             <div>
-                <div className="status">{status}</div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
+                {this.renderBoard()}
             </div>
-        );
+            )
+
     }
 }
 
