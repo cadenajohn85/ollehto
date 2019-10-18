@@ -3,10 +3,21 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 class Square extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: null,
+            bgColor: 'white'
+        };
+    }
+
     render() {
         return (
-            <button className="square">
-                {/* TODO */}
+            <button
+                className="square"
+                style={{backgroundColor:this.state.bgColor}}
+                onClick={() => this.setState({bgColor: 'blue'}) }
+            >
             </button>
         );
     }
@@ -14,7 +25,7 @@ class Square extends React.Component {
 
 class Board extends React.Component {
     renderSquare(i) {
-        return <Square />;
+        return <Square value={i} />;
     }
 
     // Using loops to render repeated elements in React:
@@ -27,8 +38,7 @@ class Board extends React.Component {
             let children = [];
             //Inner loop to create children
             for (let j = 0; j < 8; j++) {
-                // children.push(<div>{`Column ${j + 1}`}</div>)
-                children.push(this.renderSquare(j));
+                children.push(this.renderSquare(8*i + j));
             }
             //Create the parent and add the children
             board.push(<div>{children}</div>)
@@ -38,9 +48,13 @@ class Board extends React.Component {
 
 
     render() {
+        const status = 'Next player: Blue';
         return (
             <div>
-                {this.renderBoard()}
+                <div className="status">{status}</div>
+                <div>
+                    {this.renderBoard()}
+                </div>
             </div>
             )
 
