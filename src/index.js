@@ -3,10 +3,21 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 class Square extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: null,
+            bgColor: 'white'
+        };
+    }
+
     render() {
         return (
-            <button className="square">
-                {/* TODO */}
+            <button
+                className="square"
+                style={{backgroundColor:this.state.bgColor}}
+                onClick={() => this.setState({bgColor: 'blue'}) }
+            >
             </button>
         );
     }
@@ -14,32 +25,39 @@ class Square extends React.Component {
 
 class Board extends React.Component {
     renderSquare(i) {
-        return <Square />;
+        return <Square value={i} />;
     }
 
-    render() {
-        const status = 'Next player: X';
+    // Using loops to render repeated elements in React:
+    // https://blog.cloudboost.io/for-loops-in-react-render-no-you-didnt-6c9f4aa73778
+    renderBoard = () => {
+        let board = [];
 
+        // Outer loop to create parent
+        for (let i = 0; i < 8; i++) {
+            let children = [];
+            //Inner loop to create children
+            for (let j = 0; j < 8; j++) {
+                children.push(this.renderSquare(8*i + j));
+            }
+            //Create the parent and add the children
+            board.push(<div>{children}</div>)
+        }
+        return board;
+    };
+
+
+    render() {
+        const status = 'Next player: Blue';
         return (
             <div>
                 <div className="status">{status}</div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
+                <div>
+                    {this.renderBoard()}
                 </div>
             </div>
-        );
+            )
+
     }
 }
 
