@@ -19,7 +19,15 @@ class Board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            squares: Array(64).fill('white'),
+            // Populate empty squares of board with 'white'
+            // Populate middle four squares according to rules of Othello
+            squares: Array(64).fill('white',0,27)
+                .fill('blue',27,28)
+                .fill('yellow',28,29)
+                .fill('white',29,35)
+                .fill('yellow',35,36)
+                .fill('blue',36,37)
+                .fill('white',37),
             blueIsNext: true,
         };
     }
@@ -62,6 +70,7 @@ class Board extends React.Component {
 
 
     render() {
+        console.log(this.state.squares);
         const status = 'Next player: ' + (this.state.blueIsNext ? 'Blue' : 'Yellow');
 
         return (
