@@ -34,6 +34,24 @@ class Board extends React.Component {
 
     handleClick(i) {
         const squares = this.state.squares.slice();
+        // Only allow next player to play on a white square
+            // Next, add logic to determine if move is legal (one adjoining square is opponent's color)
+        if (squares[i] !== 'white') {
+            return;
+        }
+        // If player is blue, must play on a square adjoining a yellow square
+        if (this.state.blueIsNext) {
+            if (squares[i-1] !== 'yellow' && squares[i+1] !== 'yellow' && squares[i-8] !== 'yellow' && squares[i+8] !== 'yellow') {
+                return;
+            }
+        }
+        // If player is yellow, must play on a square adjoining a yellow square
+        if (!this.state.blueIsNext) {
+            if (squares[i-1] !== 'blue' && squares[i+1] !== 'blue' && squares[i-8] !== 'blue' && squares[i+8] !== 'blue') {
+                return;
+            }
+        }
+
         squares[i] = this.state.blueIsNext ? 'blue' : 'yellow';
         this.setState({
             squares: squares,
