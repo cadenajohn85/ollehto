@@ -35,7 +35,6 @@ class Board extends React.Component {
     handleClick(i) {
         const squares = this.state.squares.slice();
         // Only allow next player to play on a white square
-            // Next, add logic to determine if move is legal (one adjoining square is opponent's color)
         if (squares[i] !== 'white') {
             return;
         }
@@ -57,6 +56,45 @@ class Board extends React.Component {
             squares: squares,
             blueIsNext: !this.state.blueIsNext,
         });
+
+        // --------------------- Capture pieces when playing on the right ------------------------------------
+        // Note that this invalidates legality of some moves
+
+        let move = i;
+        let leftBound;
+
+        // .0 .1 .2 .3 .4 .5 .6 .7
+        // .8 .9 10 11 12 13 14 15
+        // 16 17 18 19 20 21 22 23
+        // 24 25 26 27 28 29 30 31
+        // 32 33 34 35 36 37 38 39
+        // 40 41 42 43 44 45 46 47
+        // 48 49 50 51 52 53 54 55
+        // 56 57 58 59 60 61 62 63
+
+        // i % 8 will equal...
+        // .0 .1 .2 .3 .4 .5 .6 .7
+        // .0 .1 .2 .3 .4 .5 .6 .7
+
+        while (squares[move] !== 'white' && (move % 8) !== 0) {
+            console.log("move = " + move);
+            if (squares[i] === squares[move]) {
+                leftBound = move;
+                console.log("leftBound = " + leftBound);
+            }
+            move--;
+            console.log("leftBound now = " + leftBound);
+        }
+
+        for (let j = leftBound; j <= i; j++) {
+            // console.log(j);
+            if (squares[j] !== squares[move]) {
+                squares[j] = this.state.blueIsNext ? 'blue' : 'yellow';
+            }
+        }
+        // --------------------- Capture pieces when playing on the right ------------------------------------
+
+
     }
 
     renderSquare(i) {
@@ -88,7 +126,7 @@ class Board extends React.Component {
 
 
     render() {
-        console.log(this.state.squares);
+        // console.log(this.state.squares);
         const status = 'Next player: ' + (this.state.blueIsNext ? 'Blue' : 'Yellow');
 
         return (
